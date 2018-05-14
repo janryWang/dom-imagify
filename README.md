@@ -1,5 +1,7 @@
 # dom-imagify
 
+> fork from dom-to-image
+
 ## Install
 
 ```
