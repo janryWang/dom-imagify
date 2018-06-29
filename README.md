@@ -1,5 +1,7 @@
 # dom-imagify
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/janryWang/dom-imagify.svg)](https://greenkeeper.io/)
+
 > fork from dom-to-image
 
 ## Install
