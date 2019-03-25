@@ -1,6 +1,6 @@
 {
   "name": "dom-imagify",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "dom to image fork version",
   "main": "lib/index.js",
   "scripts": {

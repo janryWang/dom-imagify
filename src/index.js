@@ -94,7 +94,7 @@ function toPixelData(node, options) {
  * */
 function toPng(node, options) {
     return draw(node, options || {}).then(function(canvas) {
-        return canvas.toDataURL()
+        return { url: canvas.toDataURL(), canvas }
     })
 }
 
@@ -106,7 +106,10 @@ function toPng(node, options) {
 function toJpeg(node, options) {
     options = options || {}
     return draw(node, options).then(function(canvas) {
-        return canvas.toDataURL("image/jpeg", options.quality || 1.0)
+        return {
+            url: canvas.toDataURL("image/jpeg", options.quality || 1.0),
+            canvas
+        }
     })
 }
 
