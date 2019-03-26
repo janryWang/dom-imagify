@@ -1,3 +1,5 @@
+import workerize from "workerize"
+
 var util = newUtil()
 var inliner = newInliner()
 var fontFaces = newFontFaces()
@@ -144,8 +146,18 @@ function draw(domNode, options) {
         .then(util.delay(100))
         .then(function(image) {
             var canvas = newCanvas(domNode)
-            canvas.getContext("2d").drawImage(image, 0, 0)
+            if (canvas.transferControlToOffscreen)
+                return canvas.transferControlToOffscreen()
             return canvas
+        })
+        .then(function(canvas) {
+            if (canvas instanceof window.OffscreenCanvas) {
+                return workerize(`
+                export function drawImage(canvas){ return canvas.getContext("2d").drawImage(image, 0, 0)}
+                `)(canvas)
+            } else {
+                return canvas.getContext("2d").drawImage(image, 0, 0)
+            }
         })
 
     function newCanvas(domNode) {
