@@ -191,18 +191,22 @@ function cloneNode(node, filter, root) {
             }
         )
 
-        async function cloneChildrenInOrder(parent, children, filter) {
-            var processor = async (child, filter) => {
-                return new Promise(resolve => {
-                    requestAnimationFrame(() => {
-                        resolve(cloneNode(child, filter))
+        function cloneChildrenInOrder(parent, children, filter) {
+            var done = Promise.resolve()
+            children.forEach(function(child) {
+                done = done
+                    .then(function() {
+                        return new Promise((resolve, reject) => {
+                            requestAnimationFrame(() => {
+                                cloneNode(child, filter).then(resolve, reject)
+                            })
+                        })
                     })
-                })
-            }
-            for (let i = 0; i < children.length - 1; i++) {
-                const childClone = await processor(children[i], filter)
-                if (childClone) parent.appendChild(childClone)
-            }
+                    .then(function(childClone) {
+                        if (childClone) parent.appendChild(childClone)
+                    })
+            })
+            return done
         }
     }
 
