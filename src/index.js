@@ -1,5 +1,3 @@
-import workerize from "workerize"
-
 var util = newUtil()
 var inliner = newInliner()
 var fontFaces = newFontFaces()
@@ -146,18 +144,8 @@ function draw(domNode, options) {
         .then(util.delay(100))
         .then(function(image) {
             var canvas = newCanvas(domNode)
-            if (canvas.transferControlToOffscreen)
-                return canvas.transferControlToOffscreen()
+            canvas.getContext("2d").drawImage(image, 0, 0)
             return canvas
-        })
-        .then(function(canvas) {
-            if (canvas instanceof window.OffscreenCanvas) {
-                return workerize(`
-                export function drawImage(canvas){ return canvas.getContext("2d").drawImage(image, 0, 0)}
-                `)(canvas)
-            } else {
-                return canvas.getContext("2d").drawImage(image, 0, 0)
-            }
         })
 
     function newCanvas(domNode) {
@@ -203,18 +191,18 @@ function cloneNode(node, filter, root) {
             }
         )
 
-        function cloneChildrenInOrder(parent, children, filter) {
-            var done = Promise.resolve()
-            children.forEach(function(child) {
-                done = done
-                    .then(function() {
-                        return cloneNode(child, filter)
+        async function cloneChildrenInOrder(parent, children, filter) {
+            var processor = async (child, filter) => {
+                return new Promise(resolve => {
+                    requestAnimationFrame(() => {
+                        resolve(cloneNode(child, filter))
                     })
-                    .then(function(childClone) {
-                        if (childClone) parent.appendChild(childClone)
-                    })
-            })
-            return done
+                })
+            }
+            for (let i = 0; i < children.length - 1; i++) {
+                const childClone = await processor(children[i], filter)
+                if (childClone) parent.appendChild(childClone)
+            }
         }
     }
 
