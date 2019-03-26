@@ -1,6 +1,6 @@
 {
   "name": "dom-imagify",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "dom to image fork version",
   "main": "lib/index.js",
   "scripts": {
@@ -34,13 +34,27 @@
     "prettier": "^1.11.x"
   },
   "lint-staged": {
-    "src/*.js": ["prettier --write --tab-width 4 --no-semi", "git add"],
-    "dist/*.js": ["prettier --write --tab-width 4 --no-semi", "git add"],
-    "test.js": ["prettier --write --tab-width 4 --no-semi", "git add"]
+    "src/*.js": [
+      "prettier --write --tab-width 4 --no-semi",
+      "git add"
+    ],
+    "dist/*.js": [
+      "prettier --write --tab-width 4 --no-semi",
+      "git add"
+    ],
+    "test.js": [
+      "prettier --write --tab-width 4 --no-semi",
+      "git add"
+    ]
   },
   "ava": {
-    "require": ["@babel/register"],
-    "files": ["test/**/*.spec.js", "test/*.spec.js"],
+    "require": [
+      "@babel/register"
+    ],
+    "files": [
+      "test/**/*.spec.js",
+      "test/*.spec.js"
+    ],
     "babel": {
       "testOptions": {
         "babelrc": false,
@@ -53,9 +67,13 @@
           ],
           "@babel/preset-react"
         ],
-        "plugins": ["@babel/plugin-proposal-class-properties"]
+        "plugins": [
+          "@babel/plugin-proposal-class-properties"
+        ]
       }
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "scheduler": "^0.13.5"
+  }
 }

@@ -1,3 +1,22 @@
+import {
+    unstable_scheduleCallback,
+    scheduleCallback,
+    unstable_cancelCallback,
+    cancelCallback
+} from "scheduler"
+
+const raf =
+    (requestAnimationFrame &&
+        (scheduleCallback ||
+            unstable_scheduleCallback ||
+            requestAnimationFrame)) ||
+    setTimeout
+
+const caf =
+    (requestAnimationFrame &&
+        (cancelCallback || unstable_cancelCallback || cancelAnimationFrame)) ||
+    clearTimeout
+
 var util = newUtil()
 var inliner = newInliner()
 var fontFaces = newFontFaces()
@@ -197,7 +216,7 @@ function cloneNode(node, filter, root) {
                 done = done
                     .then(function() {
                         return new Promise((resolve, reject) => {
-                            requestAnimationFrame(() => {
+                            raf(() => {
                                 cloneNode(child, filter).then(resolve, reject)
                             })
                         })
